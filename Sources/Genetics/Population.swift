@@ -24,7 +24,7 @@
 import Foundation
 
 /// A `Population` is a set of chromosomes.
-public struct Population: CustomStringConvertible {
+public struct Population: Codable, CustomStringConvertible {
   
   // MARK: Properties
   
