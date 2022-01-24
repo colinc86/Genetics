@@ -1,8 +1,5 @@
 # Genetics
 
-[![Swift Version](https://img.shields.io/badge/swift-4.0-orange.svg?style=flat)](https://swift.org)
-[![Genetics Version](https://img.shields.io/badge/version-1.0.0-lightgrey.svg?style=flat)](https://github.com/colinc86/Genetics)
-
 A genetic algorithm library for Swift.
 
 - [Features](#features)
