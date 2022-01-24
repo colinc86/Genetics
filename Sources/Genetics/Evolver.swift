@@ -133,7 +133,7 @@ extension Evolver {
       population.chromosomes[i].weight = Double.greatestFiniteMagnitude - population.chromosomes[i].error
     }
     
-    population.chromosomes.sort(by: { $0.error < $1.error })
+    population.chromosomes.sort(by: { $0.error > $1.error })
   }
   
   /// Breeds a single generation of chromosomes.
