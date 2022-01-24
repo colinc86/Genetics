@@ -118,17 +118,17 @@ extension Evolver {
   /// - Parameter population: A population of chromosomes.
   private func calculateFitnesses(in population: inout Population) {
     for i in 0 ..< population.populationSize {
-      let fitness = configuration.fitnessFunction(population.chromosomes[i])
+      let error = configuration.fitnessFunction(population.chromosomes[i])
       
-      if fitness < 0.0 {
-        print("Warning: negative fitness value \(fitness) may cause strange results.")
+      if error < 0.0 {
+        print("Warning: negative error value \(error) may cause strange results.")
       }
       
-      population.chromosomes[i].fitness = fitness
-      population.chromosomes[i].weight = fitness
+      population.chromosomes[i].error = error
+      population.chromosomes[i].weight = Double.greatestFiniteMagnitude - error
     }
     
-    population.chromosomes.sort(by: { $0.fitness < $1.fitness })
+    population.chromosomes.sort(by: { $0.error > $1.error })
   }
   
   /// Breeds a single generation of chromosomes.

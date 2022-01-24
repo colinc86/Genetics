@@ -42,7 +42,7 @@ public struct Population: CustomStringConvertible {
   public var description: String {
     var des = "Generation: \(generation)"
     for chromosome in chromosomes {
-      des += "\nChromosome: \(chromosome.description), fitness: \(chromosome.fitness)"
+      des += "\nChromosome: \(chromosome.description), error: \(chromosome.error)"
     }
     return des
   }

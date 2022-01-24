@@ -31,19 +31,19 @@ import Genetics
 //
 // 1) Generate a population of random chromosomes (x, y), where x and y are in [0.0, 1.0]
 //
-var population = Population.generate(populationSize: 10, chromosomeLength: 1024) { (_, _) -> Double in
+var population = Population.generate(populationSize: 10, chromosomeLength: 2) { (_, _) -> Double in
   return Double(arc4random()) / Double(UInt32.max - 1)
 }
 
 //
 // 2) Create an EvolverConfiguration
 //
-let configuration = EvolverConfiguration(selectionMethod: .rank, crossoverMethod: .point(count: 1), crossoverRate: 0.1, mutationFunction: { chromosome, index in
+let configuration = EvolverConfiguration(selectionMethod: .rank, crossoverMethod: .point(count: 1), crossoverRate: 0.5, mutationFunction: { chromosome, index in
   var chromosomeCopy = chromosome
   
   // We'll mutate a chromosome's index by either adding or subtracting our step size
   var value = chromosomeCopy[index]
-  let step = 0.00001
+  let step = 0.000001
   value += arc4random_uniform(2) == 0 ? step : -step
   
   // Let's make sure that the new element's value doesn't mutate to a value outside of the closed interval [0.0, 1.0]
@@ -57,9 +57,9 @@ let configuration = EvolverConfiguration(selectionMethod: .rank, crossoverMethod
   // Give the evolver the new value
   chromosomeCopy[index] = value
   return chromosomeCopy
-}, mutationRate: 0.1, fitnessFunction: { chromosome in
-  // Use our fitness function to return the fitness of the chromosome
-  return sin(Double.pi * chromosome[0]) * sin(Double.pi * chromosome[1])
+}, mutationRate: 0.5, fitnessFunction: { chromosome in
+  // Use our fitness function to return the error of the chromosome
+  return abs(sin(Double.pi * chromosome[0]) * sin(Double.pi * chromosome[1]) - sin(Double.pi * 0.5) * sin(Double.pi * 0.5))
 }, elitism: .apply(count: 1))
 
 //
@@ -72,11 +72,11 @@ let evolver = Evolver(configuration: configuration)
 //
 do {
   try evolver.evolve(population: &population, shouldContinue: { (config: inout EvolverConfiguration, pop: Population) -> Bool in
-    if pop.generation == 1000 {
+    if pop.generation % 1000 == 0 {
       print(pop.description + "\n")
     }
 
-    return pop.generation < 1000
+    return pop.generation < 100000
   })
 }
 catch let error {

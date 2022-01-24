@@ -50,13 +50,13 @@ public struct Chromosome: CustomStringConvertible, ExpressibleByArrayLiteral, Mu
     return storage.count
   }
   
-  /// The fitness of the chromosome.
+  /// The fitness of the chromosome expressed as an error.
   ///
   /// - Note: If the chromosome is part of a `Population` object, then this value is updated
   /// each time the population evolves. To prevent excessive calls to the `Evolver`'s `fitnessFunction`,
   /// this value is only updated _once_ immediately following evolution for each generation. Changing
   /// the value of this property before the next evolution will affect selection from the population.
-  public var fitness: Double = 0.0
+  public var error: Double = 0.0
   
   /// The weight of the chromosome. For internal use when performing different selection techniques.
   internal var weight: Double = 0.0
