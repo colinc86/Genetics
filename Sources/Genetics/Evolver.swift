@@ -124,8 +124,13 @@ extension Evolver {
         print("Warning: negative error value \(error) may cause strange results.")
       }
       
-      population.chromosomes[i].error = error
-      population.chromosomes[i].weight = Double.greatestFiniteMagnitude - error
+      if error == .nan || error == .infinity || error == .signalingNaN {
+        population.chromosomes[i].error = Double.greatestFiniteMagnitude
+      }
+      else {
+        population.chromosomes[i].error = error
+      }
+      population.chromosomes[i].weight = Double.greatestFiniteMagnitude - population.chromosomes[i].error
     }
     
     population.chromosomes.sort(by: { $0.error < $1.error })
