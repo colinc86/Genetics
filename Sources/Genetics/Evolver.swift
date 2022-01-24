@@ -53,20 +53,8 @@ public final class Evolver {
   
   // MARK: Properties
   
-  /// A fitness function evaluates a chromosome's fitness and returns the result.
-  public typealias FitnessFunction = (_ chromosome: Chromosome) -> Double
-  
-  /// A mutation function mutates an element of a chromosome and returns the result.
-  public typealias MutationFunction = (_ chromosome: Chromosome, _ index: Int) -> Chromosome
-  
   /// The evolver's configuration.
   public var configuration: EvolverConfiguration
-  
-  /// The evolver's fitness function.
-  public var fitnessFunction: FitnessFunction
-  
-  /// The evolver's mutation function.
-  public var mutationFunction: MutationFunction
   
   /// Whether or not the evolver should perform crossover.
   private var shouldCrossover: Bool {
@@ -83,10 +71,8 @@ public final class Evolver {
   /// Initializes an `Evolver`.
   ///
   /// - Parameter configuration: The evolver's configuration.
-  public init(configuration: EvolverConfiguration, fitnessFunction: @escaping FitnessFunction, mutationFunction: @escaping MutationFunction) {
+  public init(configuration: EvolverConfiguration) {
     self.configuration = configuration
-    self.fitnessFunction = fitnessFunction
-    self.mutationFunction = mutationFunction
   }
   
 }
@@ -132,7 +118,7 @@ extension Evolver {
   /// - Parameter population: A population of chromosomes.
   private func calculateFitnesses(in population: inout Population) {
     for i in 0 ..< population.populationSize {
-      let fitness = fitnessFunction(population.chromosomes[i])
+      let fitness = configuration.fitnessFunction(population.chromosomes[i])
       
       if fitness < 0.0 {
         print("Warning: negative fitness value \(fitness) may cause strange results.")
@@ -190,7 +176,7 @@ extension Evolver {
     }
     
     for i in 0 ..< child.count where shouldMutate {
-      child = mutationFunction(child, i)
+      child = configuration.mutationFunction(child, i)
     }
     
     return child

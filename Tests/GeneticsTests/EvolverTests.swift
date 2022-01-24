@@ -36,8 +36,8 @@ class EvolverTests: XCTestCase {
       return Double(arc4random()) / Double(uint32.max - 1)
     })
     
-    let configuration = EvolverConfiguration(selectionMethod: .rank, crossoverMethod: .uniform, elitism: .none, crossoverRate: 1.0, mutationRate: 1.0)
-    evolver = Evolver(configuration: configuration, fitnessFunction: fitnessFunction, mutationFunction: mutationFunction)
+    let configuration = EvolverConfiguration(selectionMethod: .rank, crossoverMethod: .uniform, crossoverRate: 1.0, mutationFunction: mutationFunction, mutationRate: 1.0, fitnessFunction: fitnessFunction, elitism: .none)
+    evolver = Evolver(configuration: configuration)
   }
   
   func testEvolveThrowsPopulationCount() {
@@ -123,7 +123,7 @@ extension EvolverTests {
     return sin(Double.pi * chromosome[0]) * sin(Double.pi * chromosome[1])
   }
   
-  func mutationFunction(chromosome: Chromosome, index: Int) -> Double {
+  func mutationFunction(chromosome: Chromosome, index: Int) -> Chromosome {
     var value = chromosome[index]
     let step = 0.00001
     value += arc4random_uniform(2) == 0 ? step : -step
@@ -135,7 +135,9 @@ extension EvolverTests {
       value = 1.0
     }
     
-    return value
+    var chromosomeCopy = chromosome
+    chromosomeCopy[index] = value
+    return chromosomeCopy
   }
   
 }

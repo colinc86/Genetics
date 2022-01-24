@@ -73,11 +73,23 @@ public enum ElitismType {
 /// An evolver's configuration.
 public struct EvolverConfiguration {
   
+  /// A fitness function evaluates a chromosome's fitness and returns the result.
+  public typealias FitnessFunction = (_ chromosome: Chromosome) -> Double
+  
+  /// A mutation function mutates an element of a chromosome and returns the result.
+  public typealias MutationFunction = (_ chromosome: Chromosome, _ index: Int) -> Chromosome
+  
   /// The selection method to use during evolution.
   public var selectionMethod: SelectionMethod
   
   /// The crossover method to use during evolution.
   public var crossoverMethod: CrossoverMethod
+  
+  /// The evolver's fitness function.
+  public var fitnessFunction: FitnessFunction
+  
+  /// The evolver's mutation function.
+  public var mutationFunction: MutationFunction
   
   /// The amount of elitism to apply.
   public var elitism: ElitismType
@@ -93,15 +105,27 @@ public struct EvolverConfiguration {
   /// - Parameters:
   ///   - selectionMethod: The selection method to use during evolution.
   ///   - crossoverMethod: The crossover method to use during evolution.
-  ///   - elitism: The amount of elitisim to apply.
   ///   - crossoverRate: The rate of crossover.
+  ///   - mutationFunction: The mutation function to use during evolution.
   ///   - mutationRate: The rate of mutation.
-  public init(selectionMethod: SelectionMethod = .rank, crossoverMethod: CrossoverMethod = .point(count: 1), elitism: ElitismType = .none, crossoverRate: Double = 0.5, mutationRate: Double = 0.5) {
+  ///   - fitnessFunction: The fitness function to use during evolution.
+  ///   - elitism: The amount of elitisim to apply.
+  public init(
+    selectionMethod: SelectionMethod = .rank,
+    crossoverMethod: CrossoverMethod = .point(count: 1),
+    crossoverRate: Double = 0.5,
+    mutationFunction: @escaping MutationFunction,
+    mutationRate: Double = 0.5,
+    fitnessFunction: @escaping FitnessFunction,
+    elitism: ElitismType = .none)
+  {
     self.selectionMethod = selectionMethod
-    self.elitism = elitism
     self.crossoverMethod = crossoverMethod
     self.crossoverRate = crossoverRate
+    self.mutationFunction = mutationFunction
     self.mutationRate = mutationRate
+    self.fitnessFunction = fitnessFunction
+    self.elitism = elitism
   }
   
 }
