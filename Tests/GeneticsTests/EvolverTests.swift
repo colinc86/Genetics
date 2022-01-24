@@ -123,20 +123,24 @@ extension EvolverTests {
     return sin(Double.pi * chromosome[0]) * sin(Double.pi * chromosome[1])
   }
   
-  func mutationFunction(chromosome: Chromosome, index: Int) -> Chromosome {
-    var value = chromosome[index]
-    let step = 0.00001
-    value += arc4random_uniform(2) == 0 ? step : -step
-    
-    if value < 0.0 {
-      value = 0.0
-    }
-    else if value > 1.0 {
-      value = 1.0
-    }
-    
+  func mutationFunction(chromosome: Chromosome) -> Chromosome {
     var chromosomeCopy = chromosome
-    chromosomeCopy[index] = value
+    
+    for index in 0 ..< chromosome.count {
+      var value = chromosome[index]
+      let step = 0.00001
+      value += arc4random_uniform(2) == 0 ? step : -step
+      
+      if value < 0.0 {
+        value = 0.0
+      }
+      else if value > 1.0 {
+        value = 1.0
+      }
+      
+      chromosomeCopy[index] = value
+    }
+    
     return chromosomeCopy
   }
   

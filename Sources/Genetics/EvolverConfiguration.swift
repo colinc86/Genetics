@@ -77,7 +77,7 @@ public struct EvolverConfiguration {
   public typealias FitnessFunction = (_ chromosome: Chromosome) -> Double
   
   /// A mutation function mutates an element of a chromosome and returns the result.
-  public typealias MutationFunction = (_ chromosome: Chromosome, _ index: Int) -> Chromosome
+  public typealias MutationFunction = (_ chromosome: Chromosome) -> Chromosome
   
   /// The selection method to use during evolution.
   public var selectionMethod: SelectionMethod

@@ -180,8 +180,8 @@ extension Evolver {
       child = selectParent(from: &population)
     }
     
-    for i in 0 ..< child.count where shouldMutate {
-      child = configuration.mutationFunction(child, i)
+    if shouldMutate {
+      child = configuration.mutationFunction(child)
     }
     
     return child
