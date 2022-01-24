@@ -58,30 +58,6 @@ public struct Population: CustomStringConvertible {
   
 }
 
-// MARK: Internal functions
-
-extension Population {
-  
-  /// Shuffles the population's chromosomes.
-  internal mutating func shuffleChromosomes() {
-    guard chromosomes.count > 1 else {
-      return
-    }
-    
-    // Use the Fisher-Yates algorithm
-    for i in 0 ..< Int(chromosomes.count) - 1 {
-      let j = Int(arc4random_uniform(UInt32(chromosomes.count) - UInt32(i))) + i
-      
-      if i == j {
-        continue
-      }
-      
-      chromosomes.swapAt(i, j)
-    }
-  }
-  
-}
-
 extension Population {
   
   // MARK: Static functions
@@ -94,7 +70,7 @@ extension Population {
   ///   - generatingFunction: The generating function responsible for returning a value for each element in each chromosome.
   ///   - chromosomeIndex: The 0-based index of the current chromosome being generated.
   ///   - elementIndex: The 0-based index of the current element being generated.
-  /// - Returns: An array of `Chromosome` objects.
+  /// - Returns: A population.
   public static func generate(populationSize: Int, chromosomeLength: Int, generatingFunction: (_ chromosomeIndex: Int, _ elementIndex: Int) -> Double) -> Population {
     guard populationSize > 0 && chromosomeLength > 0 else {
       return Population([Chromosome()])
@@ -107,6 +83,25 @@ extension Population {
         chromosome.append(generatingFunction(i, j))
       }
       chromosomes.append(chromosome)
+    }
+    
+    return Population(chromosomes)
+  }
+  
+  /// Generates a population of chromosomes.
+  ///
+  /// - Parameters:
+  ///   - populationSize: The number of chromosomes to generate.
+  ///   - generatingFunction: The generating function responsible for returning a value for each chromosome index.
+  /// - Returns: A population.
+  public static func generate(populationSize: Int, generatingFunction: (_ chromosomeIndex: Int) -> Chromosome) -> Population {
+    guard populationSize > 0 else {
+      return Population([Chromosome()])
+    }
+    
+    var chromosomes = [Chromosome]()
+    for i in 0 ..< populationSize {
+      chromosomes.append(generatingFunction(i))
     }
     
     return Population(chromosomes)

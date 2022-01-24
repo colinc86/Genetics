@@ -57,7 +57,7 @@ public final class Evolver {
   public typealias FitnessFunction = (_ chromosome: Chromosome) -> Double
   
   /// A mutation function mutates an element of a chromosome and returns the result.
-  public typealias MutationFunction = (_ chromosome: Chromosome, _ index: Int) -> Double
+  public typealias MutationFunction = (_ chromosome: Chromosome, _ index: Int) -> Chromosome
   
   /// The evolver's configuration.
   public var configuration: EvolverConfiguration
@@ -190,7 +190,7 @@ extension Evolver {
     }
     
     for i in 0 ..< child.count where shouldMutate {
-      child[i] = mutationFunction(child, i)
+      child = mutationFunction(child, i)
     }
     
     return child
@@ -302,7 +302,7 @@ extension Evolver {
   /// - Parameter population: A population of chromosomes.
   /// - Returns: A chromosome.
   private func tournamentSelection(from population: inout Population) -> Chromosome {
-    population.shuffleChromosomes()
+    population.chromosomes.shuffle()
     let rand = arc4random_uniform(UInt32(population.chromosomes.count - 1)) + 1
     let tournamentGroup = [Chromosome](population.chromosomes[0 ..< Int(rand)])
     return tournamentGroup.max(by: { $0.weight < $1.weight })!
