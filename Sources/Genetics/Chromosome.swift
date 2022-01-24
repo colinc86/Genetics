@@ -24,7 +24,7 @@
 import Foundation
 
 /// A `Chromosome` is an ordered set of elements which represent the solution to a problem.
-public struct Chromosome: Codable, CustomStringConvertible, ExpressibleByArrayLiteral, MutableCollection, RangeReplaceableCollection {
+public struct Chromosome: Codable, CustomStringConvertible, ExpressibleByArrayLiteral, Hashable, MutableCollection, RangeReplaceableCollection {
   
   public typealias Index = Int
   
